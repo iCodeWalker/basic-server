@@ -1,12 +1,12 @@
-// CORE MODULES
+// ############# CORE MODULES #############
 const http = require("http");
 const fs = require("fs");
 const url = require("url");
 
-// 3rd PARTY MODULES
+// ############# 3rd PARTY MODULES #############
 const slugify = require("slugify");
 
-// LOCAL MODULES
+// ############# LOCAL MODULES #############
 const replaceTemplate = require("./modules/replaceTemplate");
 
 /////////////////// SERVER ///////////////////
@@ -30,12 +30,14 @@ const dataObj = JSON.parse(data);
 const slugs = dataObj.map((el) => slugify(el.productName, { lower: true }));
 console.log(slugs);
 
-// accepts a callback function which gets fired each time a new request hits our server.
+// ############# Create a server ###############
+// ############# Accepts a callback function which gets fired each time a new request hits our server.
+
 const server = http.createServer((req, res) => {
   const { query, pathname } = url.parse(req.url, true);
 
   if (pathname === "/" || pathname === "/overview") {
-    // OVERVIEW PAGE
+    // ############# OVERVIEW PAGE #############
     res.writeHead(200, { "Content-type": "text/html" });
 
     const cardsHtml = dataObj
@@ -44,31 +46,43 @@ const server = http.createServer((req, res) => {
 
     const output = tempOverview.replace(/{%PRODUCT_CARDS%}/g, cardsHtml);
 
+    // ############# Sends back the response #############
     res.end(output);
   } else if (pathname === "/product") {
-    // PRODUCT PAGE
+    // ############# PRODUCT PAGE #############
     res.writeHead(200, { "Content-type": "text/html" });
 
     const product = dataObj[query.id];
 
     const output = replaceTemplate(tempProduct, product);
+    // ############# Sends back the response #############
     res.end(output);
   } else if (pathname === "/api") {
-    // API PAGE
+    // ############# API PAGE #############
     res.writeHead(200, { "Content-type": "application/json" });
+    // ############# In this case every thime when user request data, the data would be fetched from the file and than sent ###############
+    // To avoid reading data on every req, we can read the data only once in the starting
+    // fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
+    //   const productData = JSON.parse(data);
+    //   res.writeHead(200, { "Content-type": "application/json" });
+    //   // console.log(productData);
+    //   res.end(data);
+    // });
+    // ############# Sends back the response #############
     res.end(data);
   } else {
-    // to send status code with response
+    // ############# To send status code with response #############
     res.writeHead(404, {
       "Content-type": "text/html",
       "my-own-header": "hello-world",
     });
+    // ############# Sends back the response #############
     res.end("<h1>Page not found</h1>");
   }
 });
 
-// listening to incoming requests.
-// callback runs when server starts listening
+// ############# Listening to incoming requests at port 8000 #############
+// ############# callback runs when server starts listening #############
 server.listen(8000, "127.0.0.1", () => {
   console.log("Server has been started");
 });
