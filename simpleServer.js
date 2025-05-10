@@ -34,16 +34,20 @@ console.log(slugs);
 // ############# Accepts a callback function which gets fired each time a new request hits our server.
 
 const server = http.createServer((req, res) => {
+  // ##### url.parse is to parse or get data out of the url ####
+  // ##### We need to pass "true" as second argument in url.parse() to extract query parameter #####
   const { query, pathname } = url.parse(req.url, true);
 
   if (pathname === "/" || pathname === "/overview") {
     // ############# OVERVIEW PAGE #############
     res.writeHead(200, { "Content-type": "text/html" });
 
+    // #### Replacing placeholder with the data in the card html ####
     const cardsHtml = dataObj
       .map((item, index) => replaceTemplate(tempCard, item))
       .join();
 
+    // #### Replacing card with the placeholder in the overview html ####
     const output = tempOverview.replace(/{%PRODUCT_CARDS%}/g, cardsHtml);
 
     // ############# Sends back the response #############
