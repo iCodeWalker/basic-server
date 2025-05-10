@@ -38,3 +38,31 @@ Node.js is built around the concepts of "modules", where all kinds of additional
     Thread is basically where our node application is being run in the CPU's processor.
 
     All the users that are using our application is accessing this thread, so this thread should be non-blocking so that the users doesn't get blocked from using the application.
+
+## Modules
+
+    In Node every single file is treated as a module.
+
+## NPM
+
+    Node package manager is a command line interface manager that automatically comes with node.js and which we use to install and manage third party open source packages.
+
+    "npm init" creates a package.json file, that is configuration file of our project where all kind of data about our project is stored.
+
+    Types of packages:
+        1. Simple/Regular dependencies : Depnedencies on which our project depends.
+        2. Development dependencies : Dependencies that we need only at the time of development.
+
+    Package versioning:
+
+    "slugify": "^1.6.5"
+
+    1 : for major changes, can have breaking changes
+    6 : for minor changes, non-breaking changes
+    5 : patching changes or bug fixes, non-breaking
+
+    updating control:
+
+    ^ : accepts minor and patch updates for the package, default
+    ~ : accepts only patch updates
+    * : accepts all the updates
